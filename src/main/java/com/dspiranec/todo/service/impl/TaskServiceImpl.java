@@ -34,18 +34,11 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public TaskDTO createTask(TaskCommand taskCommand) {
-        return mapTaskToTaskDTO(taskRepository.save(mapTaskCommandToCreateTask(taskCommand)));
+        return mapTaskToTaskDTO(taskRepository.save(prepareTaskCommandForCreate(taskCommand)));
     }
 
     @Override
-    public TaskDTO updateTask(final TaskCommand taskCommand) {
-        return mapTaskToTaskDTO(taskRepository.save(mapTaskCommandToUpdateTask(taskCommand)));
-    }
-
-    @Override
-    public void deleteTask(final Long id) {
-        taskRepository.deleteById(id);
-    }
+    public void deleteTask(final Long id) { taskRepository.deleteById(id); }
 
     private TaskDTO mapTaskToTaskDTO(final Task task){
         return TaskDTO.builder()
@@ -56,21 +49,10 @@ public class TaskServiceImpl implements TaskService {
                 .build();
     }
 
-    private Task mapTaskCommandToUpdateTask(final TaskCommand taskCommand) {
-        Task task = taskRepository.findById(taskCommand.getId()).orElseThrow(() ->
-             new TaskNotFoundException("Task with id " + taskCommand.getId() + " not found.")
-        );
-        if (taskCommand.getName() != null) task.setName(taskCommand.getName());
-        if (taskCommand.getDate() != null) task.setDate(LocalDate.parse(taskCommand.getDate(), DateTimeFormatter.ofPattern("dd.MM.yyyy.")));
-        if (taskCommand.getPriority() != null) task.setPriority(taskCommand.getPriority());
-        return task;
-    }
-
-    private Task mapTaskCommandToCreateTask(final TaskCommand taskCommand) {
+    private Task prepareTaskCommandForCreate(final TaskCommand taskCommand) {
         Task task = new Task();
-        task.setId(taskCommand.getId());
         if (taskCommand.getName() != null) task.setName(taskCommand.getName());
-        if (taskCommand.getDate() != null) task.setDate(LocalDate.parse(taskCommand.getDate(), DateTimeFormatter.ofPattern("dd.MM.yyyy.")));
+        if (taskCommand.getDate() != null && !taskCommand.getDate().equals("")) task.setDate(LocalDate.parse(taskCommand.getDate(), DateTimeFormatter.ofPattern("yyy-MM-dd")));
         if (taskCommand.getPriority() != null) task.setPriority(taskCommand.getPriority());
         return task;}
 }

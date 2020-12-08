@@ -49,17 +49,7 @@ public class TaskController {
     public ResponseEntity<ApiResponse> deleteTask(@PathVariable final Long id) {
         try {
             taskService.deleteTask(id);
-            return ResponseEntity.noContent().build();
-        }
-        catch(TaskNotFoundException e) {
-            return new ResponseEntity<>(new ApiResponse(e.getMessage()),HttpStatus.NOT_FOUND);
-        }
-    }
-
-    @PatchMapping
-    public ResponseEntity<ApiResponse> updateTask(@RequestBody @Valid final TaskCommand taskCommand){
-        try {
-            return new ResponseEntity<>(new ApiResponse(taskService.updateTask(taskCommand)), HttpStatus.OK);
+            return ResponseEntity.ok().build();
         }
         catch(TaskNotFoundException e) {
             return new ResponseEntity<>(new ApiResponse(e.getMessage()),HttpStatus.NOT_FOUND);

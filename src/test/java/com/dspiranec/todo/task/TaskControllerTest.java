@@ -1,12 +1,9 @@
 package com.dspiranec.todo.task;
 
-import com.dspiranec.todo.service.TaskService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.web.JsonPath;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
@@ -80,37 +77,5 @@ public class TaskControllerTest {
 
         this.mockMvc.perform(MockMvcRequestBuilders.delete("/api/tasks/9"))
                 .andExpect(status().isNotFound());
-    }
-
-    @Test
-    void shouldUpdateTaskAndReturnOk() throws Exception {
-
-        String taskCommand = "{\n"+
-                "   \"id\": \"1\",\n" +
-                "   \"priority\": \"High\"\n" +
-                "}";
-
-        this.mockMvc.perform(MockMvcRequestBuilders.post("/api/tasks")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(taskCommand)
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
-    }
-
-    @Test
-    void shouldNotUpdateTaskAndReturnNotFound() throws Exception {
-
-        String taskCommand = "{\n"+
-                "   \"id\": \"9\",\n" +
-                "   \"name\": \"Abc\"\n" +
-                "}";
-
-        this.mockMvc.perform(MockMvcRequestBuilders.post("/api/tasks")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(taskCommand)
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
     }
 }

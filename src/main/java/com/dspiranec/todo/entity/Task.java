@@ -35,7 +35,7 @@ public class Task {
     public Task(Long id, String name, String date, String priority) {
         this.id = id;
         this.name = name;
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy.");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyy-MM-dd");
         this.date = LocalDate.parse(date, formatter);
         this.priority = Priority.valueOf(priority);
     }
